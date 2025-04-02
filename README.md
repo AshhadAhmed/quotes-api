@@ -2,16 +2,16 @@
 
 ## Overview
 
-Quotes API is a RESTful service built with Node.js and Express. It allows users to fetch random quotes, filter them by category, and perform CRUD operations with proper authentication and error handling.
+**Quotes API** is a RESTful service built with Node.js and Express. It allows users to fetch random quotes, filter them by category, and perform CRUD operations with proper authentication and error handling.
 
 ## Features
 
-- Retrieve random quotes or filter by category
-- CRUD operations for quotes
-- Authentication for adding quotes (to be implemented)
-- Admin-only access for updating and deleting quotes (to be implemented)
-- Structured folder architecture
-- Robust error handling
+- Retrieve random quotes or filter by category.
+- CRUD operations for quotes.
+- Authentication for adding quotes (to-be-implemented).
+- Admin-only access for updating and deleting quotes (to-be-implemented).
+- Structured folder architecture.
+- Robust error handling.
 
 ## Installation
 
@@ -30,7 +30,7 @@ cd quotes-api
 ### 3. Install dependencies:
 
 ```sh
-npm install
+yarn add
 ```
 
 ## Configuration
@@ -46,12 +46,12 @@ DATABASE_URL=your_database_url
 ### Start the server:
 
 ```sh
-npm start
+yarn dev
 ```
 
 ## API Endpoints
 
-### 1. GET /api/v1/quotes
+### 1. GET ***/api/v1/quotes***
 
 Retrieve all quotes or filter quotes by category.
 
