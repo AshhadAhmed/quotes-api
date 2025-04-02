@@ -2,14 +2,14 @@
 
 ## Overview
 
-**Quotes API** is a RESTful service built with Node.js and Express. It allows users to fetch random quotes, filter them by category, and perform CRUD operations with proper authentication and error handling.
+**Quotes API** is a RESTful service built with Node.js and Express. It allows users to fetch random quotes, filter them by category and perform CRUD operations with proper authentication and error handling.
 
 ## Features
 
 - Retrieve random quotes or filter by category.
 - CRUD operations for quotes.
-- Authentication for adding quotes (to-be-implemented).
-- Admin-only access for updating and deleting quotes (to-be-implemented).
+- Authentication for adding quotes (to implement).
+- Admin-only access for updating and deleting quotes (to implement).
 - Structured folder architecture.
 - Robust error handling.
 
@@ -51,27 +51,27 @@ yarn dev
 
 ## API Endpoints
 
-### 1. GET ***/api/v1/quotes***
+### GET ***/api/v1/quotes***
 
 Retrieve all quotes or filter quotes by category.
 
-### 2. GET /api/v1/quotes/random
+### GET ***/api/v1/quotes/random***
 
 Retrieve a random quote.
 
-### 3. GET /api/v1/quotes/random/category
+### GET ***/api/v1/quotes/random/category***
 
 Retrieve a random quote by category.
 
-### 4. POST /api/v1/quotes
+### POST ***/api/v1/quotes***
 
 Create a new quote (requires authentication).
 
-### 5. PUT /api/v1/quotes/:id
+### PUT ***/api/v1/quotes/:id***
 
 Update a quote by ID (admin-only).
 
-### 6. DELETE /api/v1/quotes/:id
+### DELETE ***/api/v1/quotes/:id***
 
 Delete a quote by ID (admin-only).
 
