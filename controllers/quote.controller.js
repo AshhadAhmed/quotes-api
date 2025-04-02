@@ -8,17 +8,12 @@ export const getAllQuotes = async (req, res) => {
         const { category } = req.query;
         const categories = Quote.schema.path('category').enumValues;
 
-        if (category) {
-            if (!categories.includes(category)) {
-                throw new HttpError('Invalid category', 400);
-            }
-
-            const quotes = await Quote.find({ category });
-            return res.status(200).json({ success: true, quotes });
+        if (category && !categories.includes(category)) {
+            throw new HttpError('Invalid category', 400);
         }
 
-        const quotes = await Quote.find({});
-        res.status(200).json({ success: true, quotes });
+        const quotes = await Quote.find(category ? { category } : {});
+        return res.status(200).json({ success: true, quotes });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
@@ -27,12 +22,12 @@ export const getAllQuotes = async (req, res) => {
 // GET api/v1/quotes/random (get a random quote)
 export const getRandomQuote = async (req, res) => {
     try {
-        const quote = await Quote.aggregate([{ $sample: { size: 1 } }]);
+        const [quote] = await Quote.aggregate([{ $sample: { size: 1 } }]);
 
-        if (quote.length === 0) {
+        if (!quote) {
             throw new HttpError('No quotes found', 404);
         }
-        res.status(200).json({ success: true, quote: quote[0] });
+        res.status(200).json({ success: true, quote: quote });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
@@ -48,15 +43,15 @@ export const getRandomQuoteByCategory = async (req, res) => {
             throw new HttpError('Invalid category', 400);
         }
 
-        const quote = await Quote.aggregate([
+        const [quote] = await Quote.aggregate([
             { $match: { category } },
             { $sample: { size: 1 } }
         ]);
 
-        if (quote.length === 0) {
+        if (!quote) {
             throw new HttpError('No quotes found', 404);
         }
-        res.status(200).json({ success: true, quote: quote[0] });
+        res.status(200).json({ success: true, quote: quote });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
