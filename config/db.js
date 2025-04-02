@@ -32,12 +32,6 @@ const connectDB = async (MONGODB_URI) => {
         await mongoose.connection.close();
         process.exit(0);
     });
-
-    process.on('SIGTERM', async () => {
-        console.log('SIGTERM received. Closing MongoDB connection.');
-        await mongoose.connection.close();
-        process.exit(0);
-    });
 }
 
 export default connectDB;
