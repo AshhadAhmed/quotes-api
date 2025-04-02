@@ -1,0 +1,29 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+*.log.*
+
+# Environment variable files
+.env
+
+# Build directories
+dist/
+build/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE or editor specific
+.idea/
+.vs/
+.vscode/
+
+# Other
+coverage/
+
+# Yarn lock file
+yarn-error.log*
