@@ -31,4 +31,6 @@ app.use('/api/v1/quotes', quoteRoutes);
 
 app.use(notFound);
 
-app.listen(PORT || 3000, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT || 3000, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
