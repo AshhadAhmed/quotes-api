@@ -84,15 +84,20 @@ quotes-api/
 │   ├── db.js
 │   └── env.js
 ├── contollers/
+│   ├── auth.controller.js
 │   ├── quote.controller.js
 ├── middlewares/
-│   ├── errorHandler.js
+│   ├── auth.middleware.js
+│   ├── error.middleware.js
 ├── models/
 │   ├── quote.model.js
+│   ├── user.model.js
 ├── routes
+│   ├── auth.routes.js
 │   ├── quote.routes.js
+├── utils
+│   ├── http-error.js
 ├── .env
-├── error.js
 ├── eslint.config.js
 ├── package.json
 ├── README.md
