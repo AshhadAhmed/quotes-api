@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import HttpError from '../error.js';
 import Quote from '../models/quote.model.js';
+import HttpError from '../utils/http-error.js';
 
 // GET api/v1/quotes (get all quotes)
 export const getAllQuotes = async (req, res) => {
@@ -57,7 +57,7 @@ export const getRandomQuoteByCategory = async (req, res) => {
     }
 };
 
-// POST api/v1/quotes (add a new quote (auth required)) 
+// POST api/v1/quotes (add a new quote (authentication required)) 
 export const addQuote = async (req, res) => {
     try {
         const { quote, author, category } = req.body;
@@ -76,14 +76,14 @@ export const addQuote = async (req, res) => {
             throw new HttpError('This quote already exists', 400);
         }
 
-        const newQuote = await Quote.create({ quote, author, category });
+        const newQuote = await Quote.create({ quote, author, category, createdBy: req.user.id });
         res.status(201).json({ success: true, message: 'Quote added successfully', newQuote });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 
-// PUT api/v1/quotes/:id (update an existing quote (admin only))
+// PUT api/v1/quotes/:id (update an existing quote (admin-only))
 export const updateQuote = async (req, res) => {
     try {
         const { id } = req.params;
@@ -117,7 +117,7 @@ export const updateQuote = async (req, res) => {
     }
 };
 
-// DELETE api/v1/quotes/:id (delete a quote (admin only))
+// DELETE api/v1/quotes/:id (delete a quote (admin-only))
 export const deleteQuote = async (req, res) => {
     try {
         const { id } = req.params;

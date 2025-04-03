@@ -18,6 +18,11 @@ const quoteSchema = new Schema({
         enum: ['motivation', 'love', 'success', 'inspiration', 'general'],
         default: 'general'
     },
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    }
 }, { versionKey: false, timestamps: true });
 
 export default model('Quote', quoteSchema);
