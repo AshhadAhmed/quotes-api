@@ -30,7 +30,7 @@ export const signIn = async function (req, res) {
             throw new HttpError('Invalid password', 401);
         }
 
-        // payload (data to be included in the token)
+        // payload (data to be transmitted)
         const payload = { id: user._id, role: user.role };
 
         // generate JWT token
