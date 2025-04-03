@@ -33,8 +33,8 @@ const refreshtoken = async function (req, res) {
         );
 
         res.cookie('refreshToken', newRefreshToken, {
-            httpOnly: true,         // prevents JavaScript access
-            secure: true,           // only sent over HTTPS
+            httpOnly: true,         // prevents client-side access
+            secure: true,           // only sent over HTTPS (in production)
             sameSite: 'Strict',     // prevents CSRF attacks
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
