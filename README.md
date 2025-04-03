@@ -8,8 +8,7 @@
 
 - Retrieve random quotes or filter by category.
 - CRUD operations for quotes.
-- Authentication for adding quotes (to implement).
-- Admin-only access for updating and deleting quotes (to implement).
+- Authentication for adding quotes, updating and deleting quotes.
 - Structured folder architecture.
 - Robust error handling.
 
@@ -69,11 +68,11 @@ Create a new quote (requires authentication).
 
 ### PUT ***/api/v1/quotes/:id***
 
-Update a quote by ID (admin-only).
+Update a quote by ID.
 
 ### DELETE ***/api/v1/quotes/:id***
 
-Delete a quote by ID (admin-only).
+Delete a quote by ID.
 
 ## Folder Structure
 
