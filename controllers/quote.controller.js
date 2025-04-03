@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import Quote from '../models/quote.model.js';
-import HttpError from '../utils/http-error.js';
+import HttpError from '../utils/httpError.js';
 
 // GET api/v1/quotes (get all quotes)
 export const getAllQuotes = async (req, res) => {

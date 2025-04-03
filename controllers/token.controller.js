@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWT_EXPIRATION_TIME, JWT_SECRET, REFRESH_TOKEN_SECRET } from '../config/env.js';
-import HttpError from '../utils/http-error.js';
+import HttpError from '../utils/httpError.js';
 
 const refreshtoken = async function (req, res) {
     try {
