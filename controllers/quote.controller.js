@@ -13,7 +13,7 @@ export const getAllQuotes = async (req, res) => {
         }
 
         const quotes = await Quote.find(category ? { category } : {});
-        return res.status(200).json({ success: true, quotes });
+        return res.json({ success: true, quotes });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
@@ -27,7 +27,7 @@ export const getRandomQuote = async (req, res) => {
         if (!quote) {
             throw new HttpError('No quotes found', 404);
         }
-        res.status(200).json({ success: true, quote: quote });
+        res.json({ success: true, quote: quote });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
@@ -51,7 +51,7 @@ export const getRandomQuoteByCategory = async (req, res) => {
         if (!quote) {
             throw new HttpError('No quotes found', 404);
         }
-        res.status(200).json({ success: true, quote: quote });
+        res.json({ success: true, quote: quote });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
@@ -111,7 +111,7 @@ export const updateQuote = async (req, res) => {
         if (!updatedQuote) {
             throw new HttpError('Quote not found', 404);
         }
-        res.status(200).json({ success: true, message: 'Quote updated successfully', quote: updatedQuote });
+        res.json({ success: true, message: 'Quote updated successfully', quote: updatedQuote });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
@@ -131,7 +131,7 @@ export const deleteQuote = async (req, res) => {
         if (!deletedQuote) {
             throw new HttpError('Quote not found', 404);
         }
-        res.status(200).json({ success: true, message: 'Quote deleted successfully', deletedQuote });
+        res.json({ success: true, message: 'Quote deleted successfully', deletedQuote });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }

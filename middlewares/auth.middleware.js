@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from "../config/env.js";
-import HttpError from "../utils/http-error.js";
 import Quote from "../models/quote.model.js";
+import HttpError from "../utils/http-error.js";
 
 const authenticate = function (req, res, next) {
     try {
@@ -24,9 +24,13 @@ const authenticate = function (req, res, next) {
             3. The new signature is compared with the token’s original signature.
             4. If they match, the token is valid. Otherwise, an error is thrown.
         */
-        const decodedToken = jwt.verify(token, JWT_SECRET);
-        req.user = decodedToken;    // attach the decoded object to the request
-        next();
+        jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
+            if (err) {
+                throw new HttpError('Token expired or invalid', 403);
+            }
+            req.user = decodedToken;    // attach the decoded object to the request
+            next();
+        });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }

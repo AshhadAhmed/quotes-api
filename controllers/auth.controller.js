@@ -1,10 +1,15 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { JWT_EXPIRATION_TIME, JWT_SECRET } from '../config/env.js';
+import {
+    JWT_EXPIRATION_TIME,
+    JWT_SECRET,
+    REFRESH_TOKEN_EXPIRATION_TIME,
+    REFRESH_TOKEN_SECRET
+} from '../config/env.js';
 import User from "../models/user.model.js";
 import HttpError from "../utils/http-error.js";
 
-export const SignIn = async function (req, res) {
+export const signIn = async function (req, res) {
     try {
         const { email, password } = req.body;
 
@@ -26,28 +31,40 @@ export const SignIn = async function (req, res) {
         }
 
         // payload (data to be included in the token)
-        const payload = {
-            id: user._id,
-            role: user.role
-        };
+        const payload = { id: user._id, role: user.role };
+
         // generate JWT token
-        const token = jwt.sign(
-            payload, 
-            JWT_SECRET, // secret key to be used in the signing process
-            { expiresIn: JWT_EXPIRATION_TIME } // token expiration time
+        const accessToken = jwt.sign(
+            payload,
+            JWT_SECRET,   // secret key to be used in the signing process
+            { expiresIn: JWT_EXPIRATION_TIME }  // token expiration time
         );
 
-        res.status(200).json({
+        // update the refresh token
+        const newRefreshToken = jwt.sign(
+            payload,
+            REFRESH_TOKEN_SECRET,
+            { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME }
+        );
+
+        res.cookie('refreshToken', newRefreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        res.json({
             success: true,
             message: 'Signed in successfully',
-            data: { token, user }
+            data: { token: accessToken, newRefreshToken, user }
         });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 
-export const SignUp = async function (req, res) {
+export const signUp = async function (req, res) {
     try {
         const { email, password } = req.body;
 
@@ -72,17 +89,33 @@ export const SignUp = async function (req, res) {
         }
         await user.save();
 
-        // generate JWT token
-        const token = jwt.sign(
-            { id: user._id, role: user.role }, 
+        const payload = { id: user._id, role: user.role };
+
+        // generate the access token
+        const accessToken = jwt.sign(
+            payload,
             JWT_SECRET,
             { expiresIn: JWT_EXPIRATION_TIME }
         );
 
+        // generate the refresh token
+        const refreshToken = jwt.sign(
+            payload,
+            REFRESH_TOKEN_SECRET,
+            { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME }
+        );
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
         res.status(201).json({
             success: true,
             message: 'Signed up successfully',
-            data: { token, user }
+            data: { token: accessToken, refreshToken, user }
         });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
