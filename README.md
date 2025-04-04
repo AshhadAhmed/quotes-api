@@ -86,6 +86,7 @@ quotes-api/
 ├── contollers/
 │   ├── auth.controller.js
 │   ├── quote.controller.js
+│   └── token.controller.js
 ├── middlewares/
 │   ├── auth.middleware.js
 │   ├── error.middleware.js
@@ -95,8 +96,9 @@ quotes-api/
 ├── routes
 │   ├── auth.routes.js
 │   ├── quote.routes.js
+│   └── token.routes.js
 ├── utils
-│   ├── http-error.js
+│   ├── httpError.js
 ├── .env
 ├── eslint.config.js
 ├── package.json
