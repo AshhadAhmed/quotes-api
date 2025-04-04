@@ -30,7 +30,7 @@ connectDB(MONGODB_URI);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/register', authRoutes);
 app.use('/api/v1/quotes', quoteRoutes);
 app.use('/api/v1', refreshTokenRoute);
 
