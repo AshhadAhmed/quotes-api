@@ -12,10 +12,10 @@ import refreshTokenRoute from './routes/token.routes.js';
 const app = express();
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 30,
+    limit: 20,
     handler: function (req, res) {
         res.status(429).json({
-            message: 'You have exceeded the rate limit. Please try again later.',
+            message: 'Rate limit exceeded. Please try again later.',
             resetTime: new Date(Date.now() + this.windowMs).toLocaleString(),
         });
     }
