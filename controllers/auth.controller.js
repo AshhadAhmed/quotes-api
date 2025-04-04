@@ -33,7 +33,7 @@ export const signIn = async function (req, res) {
         // payload (data to be transmitted)
         const payload = { id: user._id, role: user.role };
         // generate JWT token
-        const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+        const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
         // update the refresh token
         const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
 
@@ -47,7 +47,7 @@ export const signIn = async function (req, res) {
         res.json({
             success: true,
             message: 'Signed in successfully',
-            data: { token: accessToken, user }
+            data: { token: newAccessToken, user }
         });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
