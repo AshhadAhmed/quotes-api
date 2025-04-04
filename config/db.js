@@ -1,7 +1,7 @@
+import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import Quote from '../models/quote.model.js';
 import User from '../models/user.model.js';
-import bcrypt from 'bcryptjs';
 
 const defaultQuotes = [
     { quote: 'The only way to do great work is to love what you do.', author: 'Steve Jobs', category: 'motivation' },
@@ -16,25 +16,26 @@ const connectDB = async (MONGODB_URI) => {
         await mongoose.connect(MONGODB_URI);
         console.log('Connected to MongoDB.');
 
-        let admin = await User.findOne({ role: 'admin' });
+        let [admin, quoteCount] = await Promise.all([
+            User.findOne({ role: 'admin' }),
+            Quote.countDocuments()
+        ]);
 
         if (!admin) {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash('123456', salt);
-
+            const hashedPassword = await bcrypt.hash('123456', 10);
             admin = await User.create({ role: 'admin', email: 'admin@gmail.com', password: hashedPassword });
+
             console.log('Admin user created.');
         } else {
             console.log('Admin user already exists.');
         }
-
-        const quoteCount = await Quote.countDocuments();
 
         if (quoteCount === 0) {
             await Quote.insertMany(defaultQuotes.map(quote => ({
                 ...quote,
                 createdBy: admin._id,
             })));
+
             console.log('Default quotes added to the database.');
         } else {
             console.log('Quotes already exist, skipping insertion.');
@@ -43,13 +44,6 @@ const connectDB = async (MONGODB_URI) => {
         console.error('Error connecting to MongoDB:', err.message);
         process.exit(1);
     }
-
-    process.on('SIGINT', async () => {
-        console.log('SIGINT received. Closing MongoDB connection.');
-        await mongoose.connection.close();
-        process.exit(0);
-    });
 }
 
 export default connectDB;
-
