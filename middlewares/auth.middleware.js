@@ -7,7 +7,7 @@ const authenticate = function (req, res, next) {
     try {
         const authHeader = req.header('Authorization');
 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        if (!authHeader || !authHeader.startsWith('Bearer')) {
             throw new HttpError('Unauthorized', 401);
         }
         // Authorization: Bearer <token>
