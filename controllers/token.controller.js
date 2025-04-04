@@ -17,25 +17,15 @@ const refreshtoken = async function (req, res) {
         }
 
         const payload = { id: decodedToken.id, role: decodedToken.role };
-
         // generate JWT token
-        const accessToken = jwt.sign(
-            payload,
-            JWT_SECRET,
-            { expiresIn: JWT_EXPIRATION_TIME }
-        );
-
-        // generate a new refresh token
-        const newRefreshToken = jwt.sign(
-            payload,
-            REFRESH_TOKEN_SECRET,
-            { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME }
-        );
+        const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+        // generate a refresh token
+        const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
 
         res.cookie('refreshToken', newRefreshToken, {
-            httpOnly: true,         // prevents client-side access
-            secure: true,           // only sent over HTTPS (in production)
-            sameSite: 'Strict',     // prevents CSRF attacks
+            httpOnly: true,             // prevents client-side access
+            secure: true,               // only sent over HTTPS (in production)
+            sameSite: 'Strict',         // prevents CSRF attacks
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 

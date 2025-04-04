@@ -14,7 +14,7 @@ export const signIn = async function (req, res) {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            throw new HttpError('Missing required fields', 400);
+            throw new HttpError('Missing email or password', 400);
         }
         // check if the user already exists
         const user = await User.findOne({ email });
@@ -32,20 +32,10 @@ export const signIn = async function (req, res) {
 
         // payload (data to be transmitted)
         const payload = { id: user._id, role: user.role };
-
         // generate JWT token
-        const accessToken = jwt.sign(
-            payload,
-            JWT_SECRET,   // secret key to be used in the signing process
-            { expiresIn: JWT_EXPIRATION_TIME }  // token expiration time
-        );
-
+        const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
         // update the refresh token
-        const newRefreshToken = jwt.sign(
-            payload,
-            REFRESH_TOKEN_SECRET,
-            { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME }
-        );
+        const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
 
         res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
@@ -57,7 +47,7 @@ export const signIn = async function (req, res) {
         res.json({
             success: true,
             message: 'Signed in successfully',
-            data: { token: accessToken, newRefreshToken, user }
+            data: { token: accessToken, user }
         });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
@@ -69,41 +59,30 @@ export const signUp = async function (req, res) {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            throw new HttpError('Missing required fields', 400);
+            throw new HttpError('Missing email or password', 400);
+        }
+
+        if (password.length < 6) {
+            throw new HttpError('Password must be at least 6 characters long', 400);
         }
 
         // check if the user already exists
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            throw new HttpError('The email address is taken', 409);
+            throw new HttpError('The email address is already in use', 409);
         }
         // hashing the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const user = new User({ email, password: hashedPassword });
-
-        if (password.length < 6) {
-            throw new HttpError('Password must be at least 6 characters long', 400);
-        }
-        await user.save();
+        const user = new User.create({ email, password: hashedPassword });
 
         const payload = { id: user._id, role: user.role };
-
         // generate the access token
-        const accessToken = jwt.sign(
-            payload,
-            JWT_SECRET,
-            { expiresIn: JWT_EXPIRATION_TIME }
-        );
-
+        const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
         // generate the refresh token
-        const refreshToken = jwt.sign(
-            payload,
-            REFRESH_TOKEN_SECRET,
-            { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME }
-        );
+        const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -115,7 +94,7 @@ export const signUp = async function (req, res) {
         res.status(201).json({
             success: true,
             message: 'Signed up successfully',
-            data: { token: accessToken, refreshToken, user }
+            data: { token: accessToken, user }
         });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });

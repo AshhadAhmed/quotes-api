@@ -64,10 +64,10 @@ export const addQuote = async (req, res) => {
         const categories = Quote.schema.path('category').enumValues;
 
         if (!quote || !author) {
-            throw new HttpError('Missing required fields', 400);
+            throw new HttpError('Missing quote or author', 400);
         }
 
-        if (category && !categories.includes(category.toLowerCase())) {
+        if (category && !categories.includes(category)) {
             throw new HttpError('Invalid category', 400);
         }
         const existingQuote = await Quote.findOne({ quote });
@@ -83,7 +83,7 @@ export const addQuote = async (req, res) => {
     }
 };
 
-// PUT api/v1/quotes/:id (update an existing quote (admin-only))
+// PUT api/v1/quotes/:id (update an existing quote)
 export const updateQuote = async (req, res) => {
     try {
         const { id } = req.params;
@@ -94,7 +94,7 @@ export const updateQuote = async (req, res) => {
             throw new HttpError('Invalid ID', 400);
         }
 
-        if (category && !categories.includes(category.toLowerCase())) {
+        if (category && !categories.includes(category)) {
             throw new HttpError('Invalid category', 400);
         }
 
@@ -117,7 +117,7 @@ export const updateQuote = async (req, res) => {
     }
 };
 
-// DELETE api/v1/quotes/:id (delete a quote (admin-only))
+// DELETE api/v1/quotes/:id (delete a quote)
 export const deleteQuote = async (req, res) => {
     try {
         const { id } = req.params;
@@ -131,7 +131,7 @@ export const deleteQuote = async (req, res) => {
         if (!deletedQuote) {
             throw new HttpError('Quote not found', 404);
         }
-        res.json({ success: true, message: 'Quote deleted successfully', deletedQuote });
+        res.json({ success: true, message: 'Quote deleted successfully', quote: deletedQuote });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
