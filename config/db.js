@@ -23,12 +23,7 @@ const connectDB = async (MONGODB_URI) => {
 
         if (!admin) {
             const hashedPassword = await bcrypt.hash('123456', 10);
-            admin = await User.create({
-                role: 'admin',
-                email: 'admin@gmail.com',
-                password: hashedPassword,
-                isVerified: true
-            }); 
+            admin = await User.create({ role: 'admin', email: 'admin@gmail.com', password: hashedPassword });
 
             console.log('Admin user created.');
         } else {
