@@ -121,3 +121,9 @@ export const signUp = async function (req, res) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
+
+export const signOut = function (req, res) {
+    res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'Strict' });
+
+    return res.json({ success: true, message: 'Signed out successfully' })
+};
