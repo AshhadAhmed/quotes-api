@@ -2,8 +2,24 @@ import { Types } from 'mongoose';
 import Quote from '../models/quote.model.js';
 import HttpError from '../utils/httpError.js';
 
+const withTimeout = function (handler, time = 10000) {
+    return async (req, res, next) => {
+        const timeout = setTimeout(() => {
+            if (!res.headersSent) {
+                return res.status(408).json({ success: false, message: 'Request timed out' });
+            }
+        }, time)
+
+        try {
+            await handler(req, res, next);
+        } catch (err) {
+            clearTimeout(timeout);
+        }
+    };
+}
+
 // GET api/v1/quotes (get all quotes)
-export const getAllQuotes = async (req, res) => {
+export const getAllQuotes = withTimeout(async (req, res) => {
     try {
         const { category } = req.query;
         const categories = Quote.schema.path('category').enumValues;
@@ -11,14 +27,14 @@ export const getAllQuotes = async (req, res) => {
         if (category && !categories.includes(category)) {
             throw new HttpError('Invalid category', 400);
         }
-
+        
         const quotes = await Quote.find(category ? { category } : {});
 
         return res.json({ success: true, quotes });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
-};
+}, 8000);
 
 // GET api/v1/quotes/random (get a random quote)
 export const getRandomQuote = async (req, res) => {
