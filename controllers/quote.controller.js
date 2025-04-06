@@ -34,7 +34,7 @@ export const getRandomQuote = async (req, res) => {
     }
 };
 
-// GET api/v1/quotes/random/category?category=X/random (get a random quote by category)
+// GET api/v1/quotes/random/category?category=X (get a random quote by category)
 export const getRandomQuoteByCategory = async (req, res) => {
     try {
         const { category } = req.query;
