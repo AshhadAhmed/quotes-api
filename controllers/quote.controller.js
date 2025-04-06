@@ -6,34 +6,15 @@ import HttpError from '../utils/httpError.js';
 export const getAllQuotes = async (req, res) => {
     try {
         const { category } = req.query;
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 5;
         const categories = Quote.schema.path('category').enumValues;
-
-        if (page < 1) {
-            throw new HttpError('Invalid page number', 400);
-        }
-
-        if (limit < 1) {
-            throw new HttpError('Invalid limit', 400);
-        }
 
         if (category && !categories.includes(category)) {
             throw new HttpError('Invalid category', 400);
         }
 
-        const totalQuotes = await Quote.countDocuments()
+        const quotes = await Quote.find(category ? { category } : {});
 
-        const quotes = await Quote.find(category ? { category } : {})
-            .skip((page - 1) * limit)
-            .limit(limit);
-        return res.json({
-            success: true,
-            currentPage: page,
-            totalPages: Math.ceil(totalQuotes / limit),
-            totalQuotes,
-            quotes
-        });
+        return res.json({ success: true, quotes });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
