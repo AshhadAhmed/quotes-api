@@ -7,7 +7,7 @@ import {
     REFRESH_TOKEN_SECRET
 } from '../config/env.js';
 import User from '../models/user.model.js';
-import HttpError from '../utils/httpError.js';
+import HttpError from '../utils/HttpError.js';
 
 export const signIn = async function (req, res) {
     try {

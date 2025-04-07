@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from "../config/env.js";
 import Quote from "../models/quote.model.js";
-import HttpError from "../utils/httpError.js";
+import HttpError from "../utils/HttpError.js";
 
 const authenticate = function (req, res, next) {
     try {

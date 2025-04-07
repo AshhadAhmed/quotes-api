@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import Quote from '../models/quote.model.js';
-import HttpError from '../utils/httpError.js';
+import HttpError from '../utils/HttpError.js';
 
 const withTimeout = function (handler, time = 10000) {
     return async (req, res, next) => {
@@ -27,7 +27,7 @@ export const getAllQuotes = withTimeout(async (req, res) => {
         if (category && !categories.includes(category)) {
             throw new HttpError('Invalid category', 400);
         }
-        
+
         const quotes = await Quote.find(category ? { category } : {});
 
         return res.json({ success: true, quotes });
