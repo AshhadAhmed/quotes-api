@@ -1,5 +1,4 @@
 import express from 'express';
-import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import connectDB from './config/db.js';
@@ -10,16 +9,6 @@ import quoteRoutes from './routes/quote.routes.js';
 import refreshTokenRoute from './routes/token.routes.js';
 
 const app = express();
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit: 20,
-    handler: function (req, res) {
-        res.status(429).json({
-            message: 'Rate limit exceeded. Please try again later.',
-            resetTime: new Date(Date.now() + this.windowMs).toLocaleString(),
-        });
-    }
-});
 
 app.use(limiter);
 app.use(helmet());
