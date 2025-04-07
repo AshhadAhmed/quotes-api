@@ -98,7 +98,7 @@ quotes-api/
 │   ├── quote.routes.js
 │   └── token.routes.js
 ├── utils
-│   ├── httpError.js
+│   ├── HttpError.js
 ├── .env
 ├── eslint.config.js
 ├── package.json
