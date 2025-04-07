@@ -122,7 +122,7 @@ export const updateQuote = async (req, res) => {
         const updatedQuote = await Quote.findByIdAndUpdate(
             id,
             { quote, author, category },
-            { new: true, runValidators: true }
+            { new: true, runValidators: true }   // return the updated document and run validation
         );
 
         if (!updatedQuote) {
