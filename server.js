@@ -10,7 +10,6 @@ import refreshTokenRoute from './routes/token.routes.js';
 
 const app = express();
 
-app.use(limiter);
 app.use(helmet());
 app.use(hpp());
 
