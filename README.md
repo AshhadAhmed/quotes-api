@@ -36,8 +36,12 @@ yarn add
 - Create a `.env` file in the root directory and set the following environment variables:
 
 ```sh
-PORT=3000
-DATABASE_URL=your_database_url
+PORT=port
+MONGODB_URI=database_url
+JWT_SECRET=jwt_secret_key
+JWT_EXPIRATION_TIME=jwt_expiration_time
+REFRESH_TOKEN_SECRET=refresh_token_secret_key
+REFRESH_TOKEN_EXPIRATION_TIME=refresh_token_expiration_time
 ```
 
 ## Usage

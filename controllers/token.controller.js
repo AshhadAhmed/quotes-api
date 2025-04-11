@@ -17,8 +17,10 @@ const refreshtoken = async function (req, res) {
         }
 
         const payload = { id: decodedToken.id, role: decodedToken.role };
+
         // generate JWT token
         const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+        
         // generate a refresh token
         const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
 

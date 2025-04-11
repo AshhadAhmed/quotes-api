@@ -32,8 +32,10 @@ export const signIn = async function (req, res) {
 
         // payload (data to be transmitted)
         const payload = { id: user._id, role: user.role };
+
         // generate JWT token
         const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+
         // update the refresh token
         const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
 
@@ -70,7 +72,7 @@ export const signUp = async function (req, res) {
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            throw new HttpError('The email address is already in use', 409);
+            throw new HttpError('The email address already exists', 409);
         }
         // hashing the password
         const salt = await bcrypt.genSalt(10);
@@ -79,8 +81,10 @@ export const signUp = async function (req, res) {
         const user = await User.create({ email, password: hashedPassword });
 
         const payload = { id: user._id, role: user.role };
+
         // generate the access token
         const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+
         // generate the refresh token
         const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
 
