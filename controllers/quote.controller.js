@@ -8,7 +8,7 @@ const withTimeout = function (handler, time = 10000) {
             if (!res.headersSent) {
                 return res.status(408).json({ success: false, message: 'Request timed out' });
             }
-        }, time)
+        }, time);
 
         try {
             await handler(req, res, next);
@@ -16,7 +16,7 @@ const withTimeout = function (handler, time = 10000) {
             clearTimeout(timeout);
         }
     };
-}
+};
 
 // GET api/v1/quotes (get all quotes)
 export const getAllQuotes = withTimeout(async (req, res) => {
@@ -62,7 +62,7 @@ export const getRandomQuoteByCategory = async (req, res) => {
 
         const [quote] = await Quote.aggregate([
             { $match: { category } },
-            { $sample: { size: 1 } }
+            { $sample: { size: 1 } },
         ]);
 
         if (!quote) {
@@ -74,7 +74,7 @@ export const getRandomQuoteByCategory = async (req, res) => {
     }
 };
 
-// POST api/v1/quotes (add a new quote (authentication required)) 
+// POST api/v1/quotes (add a new quote (authentication required))
 export const addQuote = async (req, res) => {
     try {
         const { quote, author, category } = req.body;
@@ -93,8 +93,17 @@ export const addQuote = async (req, res) => {
             throw new HttpError('This quote already exists', 400);
         }
 
-        const newQuote = await Quote.create({ quote, author, category, createdBy: req.user.id });
-        res.status(201).json({ success: true, message: 'Quote added successfully', newQuote });
+        const newQuote = await Quote.create({
+            quote,
+            author,
+            category,
+            createdBy: req.user.id,
+        });
+        res.status(201).json({
+            success: true,
+            message: 'Quote added successfully',
+            newQuote,
+        });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
@@ -122,13 +131,17 @@ export const updateQuote = async (req, res) => {
         const updatedQuote = await Quote.findByIdAndUpdate(
             id,
             { quote, author, category },
-            { new: true, runValidators: true }   // return the updated document and run validation
+            { new: true, runValidators: true } // return the updated document and run validation
         );
 
         if (!updatedQuote) {
             throw new HttpError('Quote not found', 404);
         }
-        res.json({ success: true, message: 'Quote updated successfully', quote: updatedQuote });
+        res.json({
+            success: true,
+            message: 'Quote updated successfully',
+            quote: updatedQuote,
+        });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }
@@ -148,7 +161,11 @@ export const deleteQuote = async (req, res) => {
         if (!deletedQuote) {
             throw new HttpError('Quote not found', 404);
         }
-        res.json({ success: true, message: 'Quote deleted successfully', quote: deletedQuote });
+        res.json({
+            success: true,
+            message: 'Quote deleted successfully',
+            quote: deletedQuote,
+        });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
     }

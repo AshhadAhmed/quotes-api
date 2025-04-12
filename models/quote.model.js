@@ -11,12 +11,13 @@ const quoteSchema = new Schema({
         type: String,
         required: true,
         trim: true,
+        maxLength: [100, 'Author name cannot be longer than 100 characters'],
     },
     category: {
         type: String,
         trim: true,
         enum: ['motivation', 'love', 'success', 'inspiration', 'general'],
-        default: 'general'
+        default: 'general',
     },
     createdBy: {
         type: Schema.Types.ObjectId,

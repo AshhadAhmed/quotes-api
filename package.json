@@ -1,29 +1,29 @@
 {
-  "name": "quotes-api",
-  "version": "1.0.0",
-  "description": "A simple API for generating random quotes.",
-  "main": "server.js",
-  "type": "module",
-  "author": "Ahmed",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.23.0",
-    "eslint": "^9.23.0",
-    "globals": "^16.0.0",
-    "nodemon": "^3.1.9"
-  },
-  "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "dotenv": "^16.4.7",
-    "express": "^5.1.0",
-    "helmet": "^8.1.0",
-    "hpp": "^0.2.3",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.1"
-  }
+    "name": "quotes-api",
+    "version": "1.0.0",
+    "description": "A simple API for generating random quotes.",
+    "main": "server.js",
+    "type": "module",
+    "author": "Ahmed",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.23.0",
+        "eslint": "^9.23.0",
+        "globals": "^16.0.0",
+        "nodemon": "^3.1.9"
+    },
+    "dependencies": {
+        "bcryptjs": "^3.0.2",
+        "dotenv": "^16.4.7",
+        "express": "^5.1.0",
+        "helmet": "^8.1.0",
+        "hpp": "^0.2.3",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.13.1"
+    }
 }

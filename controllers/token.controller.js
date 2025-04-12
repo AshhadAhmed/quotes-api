@@ -1,5 +1,10 @@
 import jwt from 'jsonwebtoken';
-import { JWT_EXPIRATION_TIME, JWT_SECRET, REFRESH_TOKEN_SECRET } from '../config/env.js';
+import {
+    JWT_EXPIRATION,
+    JWT_SECRET,
+    REFRESH_TOKEN_EXPIRATION,
+    REFRESH_TOKEN_SECRET,
+} from '../config/env.js';
 import HttpError from '../utils/HttpError.js';
 
 const refreshtoken = async function (req, res) {
@@ -19,15 +24,19 @@ const refreshtoken = async function (req, res) {
         const payload = { id: decodedToken.id, role: decodedToken.role };
 
         // generate JWT token
-        const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
-        
+        const newAccessToken = jwt.sign(payload, JWT_SECRET, {
+            expiresIn: JWT_EXPIRATION,
+        });
+
         // generate a refresh token
-        const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
+        const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, {
+            expiresIn: REFRESH_TOKEN_EXPIRATION,
+        });
 
         res.cookie('refreshToken', newRefreshToken, {
-            httpOnly: true,             // prevents client-side access
-            secure: true,               // only sent over HTTPS (in production)
-            sameSite: 'Strict',         // prevents CSRF attacks
+            httpOnly: true,         // prevents client-side access
+            secure: true,           // only sent over HTTPS (in production)
+            sameSite: 'Strict',     // prevents CSRF attacks
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from "../config/env.js";
-import Quote from "../models/quote.model.js";
-import HttpError from "../utils/HttpError.js";
+import { JWT_SECRET } from '../config/env.js';
+import Quote from '../models/quote.model.js';
+import HttpError from '../utils/HttpError.js';
 
 const authenticate = function (req, res, next) {
     try {
@@ -44,7 +44,7 @@ const isResourceOwner = async function (req, res, next) {
             throw new HttpError('Quote not found', 404);
         }
 
-        if (req.user.role === 'admin' && quote.createdBy.toString() !== req.user.id) {
+        if ( req.user.role === 'admin' && quote.createdBy.toString() !== req.user.id) {
             throw new HttpError('Forbidden', 403);
         }
 
@@ -58,4 +58,3 @@ const isResourceOwner = async function (req, res, next) {
 };
 
 export { authenticate, isResourceOwner };
-

@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {
-    JWT_EXPIRATION_TIME,
+    JWT_EXPIRATION,
     JWT_SECRET,
-    REFRESH_TOKEN_EXPIRATION_TIME,
-    REFRESH_TOKEN_SECRET
+    REFRESH_TOKEN_EXPIRATION,
+    REFRESH_TOKEN_SECRET,
 } from '../config/env.js';
 import User from '../models/user.model.js';
 import HttpError from '../utils/HttpError.js';
@@ -34,25 +34,29 @@ export const signIn = async function (req, res) {
         const payload = { id: user._id, role: user.role };
 
         // generate JWT token
-        const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+        const newAccessToken = jwt.sign(payload, JWT_SECRET, {
+            expiresIn: JWT_EXPIRATION,
+        });
 
         // update the refresh token
-        const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
+        const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, {
+            expiresIn: REFRESH_TOKEN_EXPIRATION,
+        });
 
         res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'Strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
         res.json({
             success: true,
             message: 'Signed in successfully',
-            data: { token: newAccessToken, user }
+            data: { token: newAccessToken, user },
         });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error'});
     }
 };
 
@@ -83,22 +87,26 @@ export const signUp = async function (req, res) {
         const payload = { id: user._id, role: user.role };
 
         // generate the access token
-        const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+        const accessToken = jwt.sign(payload, JWT_SECRET, {
+            expiresIn: JWT_EXPIRATION,
+        });
 
         // generate the refresh token
-        const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME });
+        const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, {
+            expiresIn: REFRESH_TOKEN_EXPIRATION,
+        });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'Strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
         res.status(201).json({
             success: true,
             message: 'Signed up successfully',
-            data: { token: accessToken, user }
+            data: { token: accessToken, user },
         });
     } catch (err) {
         res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
@@ -106,7 +114,11 @@ export const signUp = async function (req, res) {
 };
 
 export const signOut = function (req, res) {
-    res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'Strict' });
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict',
+    });
 
-    return res.json({ success: true, message: 'Signed out successfully' })
+    return res.json({ success: true, message: 'Signed out successfully' });
 };

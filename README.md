@@ -33,15 +33,16 @@ yarn add
 ```
 
 ## Configuration
+
 - Create a `.env` file in the root directory and set the following environment variables:
 
 ```sh
 PORT=port
 MONGODB_URI=database_url
 JWT_SECRET=jwt_secret_key
-JWT_EXPIRATION_TIME=jwt_expiration_time
+JWT_EXPIRATION=jwt_expiration
 REFRESH_TOKEN_SECRET=refresh_token_secret_key
-REFRESH_TOKEN_EXPIRATION_TIME=refresh_token_expiration_time
+REFRESH_TOKEN_EXPIRATION=refresh_token_expiration
 ```
 
 ## Usage
@@ -54,27 +55,27 @@ yarn dev
 
 ## API Endpoints
 
-### GET ***/api/v1/quotes***
+### GET **_/api/v1/quotes_**
 
 Retrieve all quotes or filter quotes by category.
 
-### GET ***/api/v1/quotes/random***
+### GET **_/api/v1/quotes/random_**
 
 Retrieve a random quote.
 
-### GET ***/api/v1/quotes/random/category***
+### GET **_/api/v1/quotes/random/category_**
 
 Retrieve a random quote by category.
 
-### POST ***/api/v1/quotes***
+### POST **_/api/v1/quotes_**
 
 Create a new quote (requires authentication).
 
-### PUT ***/api/v1/quotes/:id***
+### PUT **_/api/v1/quotes/:id_**
 
 Update a quote by ID.
 
-### DELETE ***/api/v1/quotes/:id***
+### DELETE **_/api/v1/quotes/:id_**
 
 Delete a quote by ID.
 
@@ -87,7 +88,7 @@ quotes-api/
 ├── config/
 │   ├── db.js
 │   └── env.js
-├── contollers/
+├── controllers/
 │   ├── auth.controller.js
 │   ├── quote.controller.js
 │   └── token.controller.js
