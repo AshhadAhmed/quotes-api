@@ -1,11 +1,13 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { isValidObjectId } from 'mongoose';
 import {
     JWT_EXPIRATION,
     JWT_SECRET,
     REFRESH_TOKEN_EXPIRATION,
     REFRESH_TOKEN_SECRET,
 } from '../config/env.js';
+import Quote from '../models/quote.model.js';
 import User from '../models/user.model.js';
 import HttpError from '../utils/HttpError.js';
 
@@ -56,7 +58,9 @@ export const signIn = async function (req, res) {
             data: { token: newAccessToken, user },
         });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error'});
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 
@@ -105,11 +109,13 @@ export const signUp = async function (req, res) {
 
         res.status(201).json({
             success: true,
-            message: 'Signed up successfully',
+            message: 'Account created successfully',
             data: { token: accessToken, user },
         });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 
@@ -121,4 +127,37 @@ export const signOut = function (req, res) {
     });
 
     return res.json({ success: true, message: 'Signed out successfully' });
+};
+
+export const deleteAccount = async function (req, res) {
+    try {
+        if (!req.user || !req.user.id) {
+            throw new HttpError('Unauthorized', 401);
+        }
+
+        const { id, role } = req.user;   // get the user ID and role from the auth middleware
+
+        if (!isValidObjectId(id)) {
+            throw new HttpError('Invalid ID', 400);
+        }
+
+        if (role === 'admin') {
+            throw new HttpError('Admin account cannot be deleted', 403);
+        }
+
+        const deletedUser = await User.findByIdAndDelete(id);
+
+        if (!deletedUser) {
+            throw new HttpError('User not found', 404);
+        }
+
+        // delete related quotes by user
+        await Quote.deleteMany({ createdBy: id });
+
+        res.json({ success: true, message: 'Account deleted successfully' });
+    } catch (err) {
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
+    }
 };

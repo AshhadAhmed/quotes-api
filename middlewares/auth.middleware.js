@@ -32,7 +32,9 @@ const authenticate = function (req, res, next) {
             next();
         });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 

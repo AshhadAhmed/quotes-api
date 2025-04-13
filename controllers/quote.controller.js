@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { isValidObjectId } from 'mongoose';
 import Quote from '../models/quote.model.js';
 import HttpError from '../utils/HttpError.js';
 
@@ -32,7 +32,9 @@ export const getAllQuotes = withTimeout(async (req, res) => {
 
         return res.json({ success: true, quotes });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 }, 8000);
 
@@ -46,7 +48,9 @@ export const getRandomQuote = async (req, res) => {
         }
         res.json({ success: true, quote: quote });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 
@@ -70,7 +74,9 @@ export const getRandomQuoteByCategory = async (req, res) => {
         }
         res.json({ success: true, quote: quote });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 
@@ -105,7 +111,9 @@ export const addQuote = async (req, res) => {
             newQuote,
         });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 
@@ -116,7 +124,7 @@ export const updateQuote = async (req, res) => {
         const { quote, author, category } = req.body;
         const categories = Quote.schema.path('category').enumValues;
 
-        if (!Types.ObjectId.isValid(id)) {
+        if (!isValidObjectId(id)) {
             throw new HttpError('Invalid ID', 400);
         }
 
@@ -131,7 +139,7 @@ export const updateQuote = async (req, res) => {
         const updatedQuote = await Quote.findByIdAndUpdate(
             id,
             { quote, author, category },
-            { new: true, runValidators: true } // return the updated document and run validation
+            { new: true, runValidators: true }  // return the updated document and run validation
         );
 
         if (!updatedQuote) {
@@ -143,7 +151,9 @@ export const updateQuote = async (req, res) => {
             quote: updatedQuote,
         });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
 
@@ -152,7 +162,7 @@ export const deleteQuote = async (req, res) => {
     try {
         const { id } = req.params;
 
-        if (!Types.ObjectId.isValid(id)) {
+        if (!isValidObjectId(id)) {
             throw new HttpError('Invalid ID', 400);
         }
 
@@ -167,6 +177,8 @@ export const deleteQuote = async (req, res) => {
             quote: deletedQuote,
         });
     } catch (err) {
-        res.status(err.statusCode || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+        res
+            .status(err.statusCode || 500)
+            .json({ success: false, message: err.message || 'Internal Server Error' });
     }
 };
