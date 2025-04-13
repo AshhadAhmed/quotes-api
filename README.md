@@ -71,11 +71,11 @@ Retrieve a random quote by category.
 
 Create a new quote (requires authentication).
 
-### PUT **_/api/v1/quotes/:id_**
+### PUT **_/api/v1/quotes/{id}_**
 
 Update a quote by ID.
 
-### DELETE **_/api/v1/quotes/:id_**
+### DELETE **_/api/v1/quotes/{id}_**
 
 Delete a quote by ID.
 
