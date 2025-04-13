@@ -46,7 +46,7 @@ const isResourceOwner = async function (req, res, next) {
             throw new HttpError('Quote not found', 404);
         }
 
-        if ( req.user.role === 'admin' && quote.createdBy.toString() !== req.user.id) {
+        if (req.user.role === 'admin' && quote.createdBy.toString() !== req.user.id) {
             throw new HttpError('Forbidden', 403);
         }
 
