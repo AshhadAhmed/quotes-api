@@ -59,23 +59,23 @@ yarn dev
 
 Retrieve all quotes or filter quotes by category.
 
-### GET **_/api/v1/quotes/random_**
+### GET **_`/api/v1/quotes/random`_**
 
 Retrieve a random quote.
 
-### GET **_/api/v1/quotes/random/category_**
+### GET **_`/api/v1/quotes/random/category`_**
 
 Retrieve a random quote by category.
 
-### POST **_/api/v1/quotes_**
+### POST **_`/api/v1/quotes`_**
 
 Create a new quote (🔐 auth required).
 
-### PUT **_/api/v1/quotes/{id}_**
+### PUT **_`/api/v1/quotes/{id}`_**
 
 Update a quote by ID.
 
-### DELETE **_/api/v1/quotes/{id}_**
+### DELETE **`/api/v1/quotes/{id}`**
 
 Delete a quote by ID.
 
