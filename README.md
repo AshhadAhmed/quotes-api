@@ -75,7 +75,7 @@ Create a new quote (🔐 auth required).
 
 Update a quote by ID.
 
-### DELETE **`/api/v1/quotes/{id}`**
+### DELETE **_`/api/v1/quotes/{id}`_**
 
 Delete a quote by ID.
 
