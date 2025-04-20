@@ -1,10 +1,10 @@
 # Quotes API
 
-## Overview
+## 📘 Overview
 
 **Quotes API** is a RESTful service built with Node.js and Express. It allows users to fetch random quotes, filter them by category and perform CRUD operations with proper authentication and error handling.
 
-## Features
+## 🚀 Features
 
 - Retrieve random quotes or filter by category.
 - CRUD operations for quotes.
@@ -12,27 +12,27 @@
 - Structured folder architecture.
 - Robust error handling.
 
-## Installation
+## 🛠️ Installation
 
-### 1. Clone the repository:
+### 1️⃣ Clone the repository:
 
 ```sh
 git clone https://github.com/AshhadAhmed/quotes-api.git
 ```
 
-### 2. Navigate to the project directory:
+### 2️⃣ Navigate to the project directory:
 
 ```sh
 cd quotes-api
 ```
 
-### 3. Install dependencies:
+### 3️⃣ Install dependencies:
 
 ```sh
 yarn add
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 - Create a `.env` file in the root directory and set the following environment variables:
 
@@ -45,7 +45,7 @@ REFRESH_TOKEN_SECRET=refresh_token_secret_key
 REFRESH_TOKEN_EXPIRATION=refresh_token_expiration
 ```
 
-## Usage
+## ▶️ Usage
 
 ### Start the server:
 
@@ -53,7 +53,7 @@ REFRESH_TOKEN_EXPIRATION=refresh_token_expiration
 yarn dev
 ```
 
-## API Endpoints
+## 📡 API Endpoints
 
 ### GET **_/api/v1/quotes_**
 
@@ -69,7 +69,7 @@ Retrieve a random quote by category.
 
 ### POST **_/api/v1/quotes_**
 
-Create a new quote (requires authentication).
+Create a new quote (🔐 auth required).
 
 ### PUT **_/api/v1/quotes/{id}_**
 
@@ -79,7 +79,7 @@ Update a quote by ID.
 
 Delete a quote by ID.
 
-## Folder Structure
+## 📁 Folder Structure
 
 The project is structured as follows:
 
