@@ -55,7 +55,7 @@ yarn dev
 
 ## 📡 API Endpoints
 
-### GET `/api/v1/quotes`
+### GET `**_/api/v1/quotes_**`
 
 Retrieve all quotes or filter quotes by category.
 
