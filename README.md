@@ -1,5 +1,3 @@
-# Quotes API
-
 ## 📘 Overview
 
 **Quotes API** is a RESTful service built with Node.js and Express. It allows users to fetch random quotes, filter them by category and perform CRUD operations with proper authentication and error handling.
