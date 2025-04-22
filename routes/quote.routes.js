@@ -17,7 +17,7 @@ router.get('/random', getRandomQuote);
 router.get('/random/category', getRandomQuoteByCategory);
 router
     .route('/:id')
-    .put(...authMiddleware, updateQuote)
+    .patch(...authMiddleware, updateQuote)
     .delete(...authMiddleware, deleteQuote);
 
 export default router;

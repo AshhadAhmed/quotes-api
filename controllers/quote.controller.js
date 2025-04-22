@@ -2,24 +2,8 @@ import { isValidObjectId } from 'mongoose';
 import Quote from '../models/quote.model.js';
 import HttpError from '../utils/HttpError.js';
 
-const withTimeout = function (handler, time = 10000) {
-    return async (req, res, next) => {
-        const timeout = setTimeout(() => {
-            if (!res.headersSent) {
-                return res.status(408).json({ success: false, message: 'Request timed out' });
-            }
-        }, time);
-
-        try {
-            await handler(req, res, next);
-        } catch (err) {
-            clearTimeout(timeout);
-        }
-    };
-};
-
 // GET api/v1/quotes (get all quotes)
-export const getAllQuotes = withTimeout(async (req, res) => {
+export const getAllQuotes = async (req, res) => {
     try {
         const { category } = req.query;
         const categories = Quote.schema.path('category').enumValues;
@@ -36,7 +20,7 @@ export const getAllQuotes = withTimeout(async (req, res) => {
             .status(err.statusCode || 500)
             .json({ success: false, message: err.message || 'Internal Server Error' });
     }
-}, 8000);
+};
 
 // GET api/v1/quotes/random (get a random quote)
 export const getRandomQuote = async (req, res) => {
@@ -80,7 +64,7 @@ export const getRandomQuoteByCategory = async (req, res) => {
     }
 };
 
-// POST api/v1/quotes (add a new quote (authentication required))
+// POST api/v1/quotes (add a new quote)
 export const addQuote = async (req, res) => {
     try {
         const { quote, author, category } = req.body;
@@ -117,7 +101,7 @@ export const addQuote = async (req, res) => {
     }
 };
 
-// PUT api/v1/quotes/:id (update an existing quote)
+// PATCH api/v1/quotes/:id (update an existing quote)
 export const updateQuote = async (req, res) => {
     try {
         const { id } = req.params;
