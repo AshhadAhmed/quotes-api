@@ -2,7 +2,7 @@ import { isValidObjectId } from 'mongoose';
 import Quote from '../models/quote.model.js';
 import HttpError from '../utils/HttpError.js';
 
-// GET api/v1/quotes (get all quotes)
+// GET api/v1/quotes (get all quotes
 export const getAllQuotes = async (req, res) => {
     try {
         const { category } = req.query;
