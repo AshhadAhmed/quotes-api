@@ -8,7 +8,7 @@ export const getAllQuotes = async (req, res, next) => {
     const categories = Quote.schema.path('category').enumValues;
 
     if (category && !categories.includes(category))
-        next(new HttpError('Invalid category', 400));
+        return next(new HttpError('Invalid category', 400));
 
     const quotes = await Quote.find(category ? { category } : {});
     res.json({ success: true, quotes });
@@ -18,7 +18,7 @@ export const getAllQuotes = async (req, res, next) => {
 export const getRandomQuote = async (req, res, next) => {
     const [quote] = await Quote.aggregate([{ $sample: { size: 1 } }]);
 
-    if (!quote) next(new HttpError('No quotes found', 404));
+    if (!quote) return next(new HttpError('No quotes found', 404));
     res.json({ success: true, quote: quote });
 };
 
@@ -28,14 +28,14 @@ export const getRandomQuoteByCategory = async (req, res, next) => {
     const categories = Quote.schema.path('category').enumValues;
 
     if (category && !categories.includes(category))
-        next(new HttpError('Invalid category', 400));
+        return next(new HttpError('Invalid category', 400));
 
     const [quote] = await Quote.aggregate([
         { $match: { category } },
         { $sample: { size: 1 } },
     ]);
 
-    if (!quote) next(new HttpError('No quotes found', 404));
+    if (!quote) return next(new HttpError('No quotes found', 404));
     res.json({ success: true, quote: quote });
 };
 
@@ -44,14 +44,14 @@ export const addQuote = async (req, res, next) => {
     const { quote, author, category } = req.body;
     const categories = Quote.schema.path('category').enumValues;
 
-    if (!quote || !author) next(new HttpError('Missing quote or author', 400));
+    if (!quote || !author) return next(new HttpError('Missing quote or author', 400));
 
     if (category && !categories.includes(category))
-        next(new HttpError('Invalid category', 400));
+        return next(new HttpError('Invalid category', 400));
 
     const existingQuote = await Quote.findOne({ quote });
 
-    if (existingQuote) next(new HttpError('This quote already exists', 400));
+    if (existingQuote) return next(new HttpError('This quote already exists', 400));
     await Quote.create({
         quote,
         author,
@@ -67,13 +67,13 @@ export const updateQuote = async (req, res, next) => {
     const { quote, author, category } = req.body;
     const categories = Quote.schema.path('category').enumValues;
 
-    if (!isValidObjectId(id)) next(new HttpError('Invalid ID', 400));
+    if (!isValidObjectId(id)) return next(new HttpError('Invalid ID', 400));
 
     if (category && !categories.includes(category))
-        next(new HttpError('Invalid category', 400));
+        return next(new HttpError('Invalid category', 400));
 
     if (!quote && !author && !category)
-        next(new HttpError('No valid fields to update', 400));
+        return next(new HttpError('No valid fields to update', 400));
 
     const updatedQuote = await Quote.findByIdAndUpdate(
         id,
@@ -81,7 +81,7 @@ export const updateQuote = async (req, res, next) => {
         { new: true, runValidators: true }   // return the updated document and run validation
     );
 
-    if (!updatedQuote) next(new HttpError('Quote not found', 404));
+    if (!updatedQuote) return next(new HttpError('Quote not found', 404));
     res.json({
         success: true,
         message: 'Quote updated successfully',
@@ -93,10 +93,10 @@ export const updateQuote = async (req, res, next) => {
 export const deleteQuote = async (req, res, next) => {
     const { id } = req.params;
 
-    if (!isValidObjectId(id)) next(new HttpError('Invalid ID', 400));
+    if (!isValidObjectId(id)) return next(new HttpError('Invalid ID', 400));
 
     const deletedQuote = await Quote.findByIdAndDelete(id);
 
-    if (!deletedQuote) next(new HttpError('Quote not found', 404));
+    if (!deletedQuote) return next(new HttpError('Quote not found', 404));
     res.json({ success: true, message: 'Quote deleted successfully' });
 };
