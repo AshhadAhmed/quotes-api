@@ -7,7 +7,7 @@ const authenticate = function (req, res, next) {
     const authHeader = req.header('Authorization');
 
     if (!authHeader || !authHeader?.startsWith('Bearer'))
-        next(new HttpError('Unauthorized', 401));
+        return next(new HttpError('Unauthorized', 401));
     // Authorization: Bearer <token>
     const token = authHeader.split(' ')[1];
 
@@ -23,7 +23,7 @@ const authenticate = function (req, res, next) {
         4. If they match, the token is valid. Otherwise, an error is thrown.
     */
     jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
-        if (err) next(new HttpError('Token expired or invalid', 403));
+        if (err) return next(new HttpError('Token expired or invalid', 403));
         req.user = decodedToken;    // attach the decoded object to the request
         next();
     });
@@ -33,13 +33,13 @@ const isResourceOwner = async function (req, res, next) {
     const { role, id } = req.user;
     const quote = await Quote.findById(req.params.id);
 
-    if (!quote) next(new HttpError('Quote not found', 404));
+    if (!quote) return next(new HttpError('Quote not found', 404));
 
     if (role === 'admin' && quote.createdBy.toString() !== id)
-        next(new HttpError('Forbidden', 403));
+        return next(new HttpError('Forbidden', 403));
 
     if (role === 'user' && quote.createdBy.toString() !== id)
-        next(new HttpError('Forbidden', 403));
+        return next(new HttpError('Forbidden', 403));
     next();
 };
 
