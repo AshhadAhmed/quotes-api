@@ -10,11 +10,11 @@ import HttpError from '../utils/HttpError.js';
 const refreshtoken = async function (req, res, next) {
     const { refreshToken } = req.cookies;
 
-    if (!refreshToken) next(new HttpError('Missing refresh token', 400));
+    if (!refreshToken) return next(new HttpError('Missing refresh token', 400));
     // verify the refresh token
     const decodedToken = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
 
-    if (!decodedToken) next(new HttpError('Invalid refresh token', 403));
+    if (!decodedToken) return next(new HttpError('Invalid refresh token', 403));
     const payload = { id: decodedToken.id, role: decodedToken.role };
 
     // generate JWT token
